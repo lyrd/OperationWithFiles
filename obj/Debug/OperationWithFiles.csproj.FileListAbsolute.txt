@@ -1,0 +1,5 @@
+C:\OperationWithFiles\bin\Debug\OperationWithFiles.dll
+C:\OperationWithFiles\bin\Debug\OperationWithFiles.pdb
+C:\OperationWithFiles\obj\Debug\OperationWithFiles.csprojResolveAssemblyReference.cache
+C:\OperationWithFiles\obj\Debug\OperationWithFiles.dll
+C:\OperationWithFiles\obj\Debug\OperationWithFiles.pdb
