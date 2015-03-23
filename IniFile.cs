@@ -7,13 +7,15 @@ using System.Threading.Tasks;
 
 namespace OperationWithFiles
 {
-    public class IniFile
+    public class IniFile : IDisposable
     {
         public string path;
+        bool disposed;
 
         [DllImport("kernel32")]
         private static extern long WritePrivateProfileString(string section,
         string key, string val, string filePath);
+
         [DllImport("kernel32")]
         private static extern int GetPrivateProfileString(string section,
         string key, string def, StringBuilder retVal,
@@ -47,5 +49,27 @@ namespace OperationWithFiles
             GetPrivateProfileSectionNames(buffer, buffer.Length, this.path);
             return buffer;
         }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    //dispose managed resources
+                    this.path = null;
+                }
+            }
+            //dispose unmanaged resources
+            disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~IniFile() { Dispose(false); }
     }
 }
