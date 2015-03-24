@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -9,8 +10,9 @@ namespace OperationWithFiles
 {
     public class IniFile : IDisposable
     {
-        public string path;
-        bool disposed;
+        private string path;
+        private bool disposed;
+        private FileStream fs;
 
         [DllImport("kernel32")]
         private static extern long WritePrivateProfileString(string section,
@@ -24,16 +26,23 @@ namespace OperationWithFiles
         [DllImport("kernel32.dll", EntryPoint = "GetPrivateProfileSectionNamesA")]
         static extern int GetPrivateProfileSectionNames(byte[] lpszReturnBuffer, int nSize, string lpFileName);
 
-        public IniFile(string INIPath)
+        public IniFile(string IniPath)
         {
-            path = INIPath;
+            path = IniPath;
+        }
+
+        public void CreateIni()
+        {
+            //if(!File.Exists(path))
+            fs = File.Create(path);  
+            //else
+            //TODO: exception
         }
 
         public void IniWriteValue(string Section, string Key, string Value)
         {
             WritePrivateProfileString(Section, Key, Value, this.path);
         }
-
 
         public string IniReadValue(string Section, string Key)
         {
@@ -58,6 +67,11 @@ namespace OperationWithFiles
                 {
                     //dispose managed resources
                     this.path = null;
+                    if (this.fs != null)
+                    {
+                        this.fs.Dispose();
+                        this.fs = null;
+                    }
                 }
             }
             //dispose unmanaged resources
