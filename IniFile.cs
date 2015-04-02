@@ -1,13 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace OperationWithFiles
 {
+    [Serializable]
+    public class FileException : Exception
+    {
+        public FileException() { }
+        public FileException(string message) : base(message) { }
+        public FileException(string message, Exception ex) : base(message) { }
+        protected FileException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+    }
+
     public class IniFile : IDisposable
     {
         private string path;
@@ -26,33 +33,32 @@ namespace OperationWithFiles
         [DllImport("kernel32.dll", EntryPoint = "GetPrivateProfileSectionNamesA")]
         static extern int GetPrivateProfileSectionNames(byte[] lpszReturnBuffer, int nSize, string lpFileName);
 
-        public IniFile(string IniPath)
+        public IniFile(string pathToFile)
         {
-            path = IniPath;
+            this.path = pathToFile;
         }
 
-        public void CreateIni()
+        public void Create()
         {
-            //if(!File.Exists(path))
-            fs = File.Create(path);  
-            //else
-            //TODO: exception
+            if (!File.Exists(path))
+                fs = File.Create(path);
+            else
+                throw new FileException("Файл существует");
         }
 
-        public void IniWriteValue(string Section, string Key, string Value)
+        public void Write(string Section, string Key, string Value)
         {
             WritePrivateProfileString(Section, Key, Value, this.path);
         }
 
-        public string IniReadValue(string Section, string Key)
+        public string Read(string Section, string Key)
         {
             StringBuilder temp = new StringBuilder(255);
-            int i = GetPrivateProfileString(Section, Key, "", temp,
-            255, this.path);
+            int i = GetPrivateProfileString(Section, Key, "", temp, 255, this.path);
             return temp.ToString();
         }
 
-        public byte[] IniSection()
+        public byte[] GetSection()
         {
             byte[] buffer = new byte[1024];
             GetPrivateProfileSectionNames(buffer, buffer.Length, this.path);
@@ -66,6 +72,7 @@ namespace OperationWithFiles
                 if (disposing)
                 {
                     //dispose managed resources
+                    this.path = "";
                     this.path = null;
                     if (this.fs != null)
                     {

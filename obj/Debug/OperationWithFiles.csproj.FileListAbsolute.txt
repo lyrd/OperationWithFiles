@@ -8,3 +8,8 @@ C:\Users\Molokanov\Documents\GitHub\OperationWithFiles\obj\Debug\OperationWithFi
 C:\Users\Molokanov\Documents\GitHub\OperationWithFiles\obj\Debug\OperationWithFiles.pdb
 C:\Users\Molokanov\Documents\GitHub\OperationWithFiles\bin\Debug\OperationWithFiles.dll
 C:\Users\Molokanov\Documents\GitHub\OperationWithFiles\bin\Debug\OperationWithFiles.pdb
+C:\Users\Anton\Documents\GitHub\OperationWithFiles\bin\Debug\OperationWithFiles.dll
+C:\Users\Anton\Documents\GitHub\OperationWithFiles\bin\Debug\OperationWithFiles.pdb
+C:\Users\Anton\Documents\GitHub\OperationWithFiles\obj\Debug\OperationWithFiles.csprojResolveAssemblyReference.cache
+C:\Users\Anton\Documents\GitHub\OperationWithFiles\obj\Debug\OperationWithFiles.dll
+C:\Users\Anton\Documents\GitHub\OperationWithFiles\obj\Debug\OperationWithFiles.pdb
