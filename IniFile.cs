@@ -6,20 +6,10 @@ using System.Text;
 
 namespace OperationWithFiles
 {
-    [Serializable]
-    public class FileException : Exception
-    {
-        public FileException() { }
-        public FileException(string message) : base(message) { }
-        public FileException(string message, Exception ex) : base(message) { }
-        protected FileException(SerializationInfo info, StreamingContext context) : base(info, context) { }
-    }
-
-    public class IniFile : IDisposable
+    public class IniFile : Files.IniFilesBaseClass, IDisposable
     {
         private string path;
         private bool disposed;
-        private FileStream fs;
 
         [DllImport("kernel32")]
         private static extern long WritePrivateProfileString(string section,
@@ -38,20 +28,12 @@ namespace OperationWithFiles
             this.path = pathToFile;
         }
 
-        public void Create()
-        {
-            if (!File.Exists(path))
-                fs = File.Create(path);
-            else
-                throw new FileException("Файл существует");
-        }
-
-        public void Write(string Section, string Key, string Value)
+        public override void Write(string Section, string Key, string Value)
         {
             WritePrivateProfileString(Section, Key, Value, this.path);
         }
 
-        public string Read(string Section, string Key)
+        public override string Read(string Section, string Key)
         {
             StringBuilder temp = new StringBuilder(255);
             int i = GetPrivateProfileString(Section, Key, "", temp, 255, this.path);
@@ -74,11 +56,6 @@ namespace OperationWithFiles
                     //dispose managed resources
                     this.path = "";
                     this.path = null;
-                    if (this.fs != null)
-                    {
-                        this.fs.Dispose();
-                        this.fs = null;
-                    }
                 }
             }
             //dispose unmanaged resources
